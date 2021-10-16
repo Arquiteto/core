@@ -13,6 +13,7 @@ from . import (
     DATA_LEAF,
     DATA_RANGE_AC,
     DATA_RANGE_AC_OFF,
+    DATA_BATTERY_WH
     LeafEntity,
 )
 
@@ -30,6 +31,7 @@ def setup_platform(hass, config, add_devices, discovery_info=None):
     for vin, datastore in hass.data[DATA_LEAF].items():
         _LOGGER.debug("Adding sensors for vin=%s", vin)
         devices.append(LeafBatterySensor(datastore))
+        devices.append(LeafBatteryWhSensor(datastore))
         devices.append(LeafRangeSensor(datastore, True))
         devices.append(LeafRangeSensor(datastore, False))
 
@@ -65,6 +67,29 @@ class LeafBatterySensor(LeafEntity, SensorEntity):
         chargestate = self.car.data[DATA_CHARGING]
         return icon_for_battery_level(battery_level=self.state, charging=chargestate)
 
+class LeafBatteryWhSensor(LeafEntity, SensorEntity):
+    """Nissan Leaf Battery WH Sensor."""
+
+    @property
+    def name(self):
+        """Sensor Name."""
+        return f"{self.car.leaf.nickname} Charge WH"
+
+    @property
+    def native_value(self):
+        """Battery state WH."""
+        return round(self.car.data[DATA_BATTERY_WH])
+
+    @property
+    def native_unit_of_measurement(self):
+        """Battery state measured in WH."""
+        return "Wh"
+
+    @property
+    def icon(self):
+        """Battery state icon handling."""
+        chargestate = self.car.data[DATA_CHARGING]
+        return ICON_RANGE 
 
 class LeafRangeSensor(LeafEntity, SensorEntity):
     """Nissan Leaf Range Sensor."""
