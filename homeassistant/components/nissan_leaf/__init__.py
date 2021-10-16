@@ -215,6 +215,7 @@ class LeafDataStore:
         self.data = {}
         self.data[DATA_CLIMATE] = False
         self.data[DATA_BATTERY] = 0
+        self.data[DATA_BATTERY_WH] = 0
         self.data[DATA_CHARGING] = False
         self.data[DATA_RANGE_AC] = 0
         self.data[DATA_RANGE_AC_OFF] = 0
@@ -314,7 +315,7 @@ class LeafDataStore:
 
                 self.data[DATA_PLUGGED_IN] = server_response.is_connected
                 self.data[DATA_CHARGING] = server_response.is_charging
-                self.data[DATA_BATTERY_WH] = server_response.BatteryStatusRecords.BatteryStatus.BatteryRemainingAmountWH
+                self.data[DATA_BATTERY_WH] = server_response.answer["BatteryStatusRecords"]["BatteryRemainingAmountWH"]
                 async_dispatcher_send(self.hass, SIGNAL_UPDATE_LEAF)
                 self.last_battery_response = utcnow()
 
