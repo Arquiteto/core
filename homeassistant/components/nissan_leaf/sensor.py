@@ -13,7 +13,7 @@ from . import (
     DATA_LEAF,
     DATA_RANGE_AC,
     DATA_RANGE_AC_OFF,
-    DATA_BATTERY_WH
+    DATA_BATTERY_WH,
     LeafEntity,
 )
 
